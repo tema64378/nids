@@ -132,10 +132,3 @@ docker compose --profile capture up    # ещё и сниффер (на Linux-х
 | `api/main.py`          | FastAPI `/predict`, `/health` |
 | `dashboard/app.py`     | живой дашборд на Streamlit |
 
-## Дорожная карта (что добавить, чтобы выделиться)
-
-- [x] Объяснения предсказаний через SHAP
-- [x] ROC-кривая + матрица ошибок, сохраняются при обучении
-- [x] Живой авто-обновляемый дашборд + симулятор трафика
-- [ ] Заменить JSONL на Postgres для дашборда
-- [ ] Сравнить модели (RandomForest vs XGBoost vs простая нейросеть)
