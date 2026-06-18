@@ -1,5 +1,12 @@
 # NIDS — система обнаружения сетевых вторжений
 
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-22c55e)
+![scikit-learn](https://img.shields.io/badge/ML-scikit--learn-F7931E?logo=scikitlearn&logoColor=white)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/dashboard-Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![Scope](https://img.shields.io/badge/scope-defensive%20%2F%20educational-7c3aed)
+
 Обнаружение вторжений на основе ML: захватываем сетевые потоки, классифицируем их
 моделью, обученной на CICIDS-2017, поднимаем алерты, отдаём API и живой дашборд.
 
@@ -9,13 +16,19 @@
 
 ## Архитектура
 
-```
-пакеты ──▶ capture/sniffer.py ──▶ features/extractor.py ──▶ model/predict.py ──▶ alerts/engine.py
-                                          │                        ▲                     │
-                                   features/schema.py  ◀──────── model/train.py          ▼
-                                  (единый контракт признаков)                     data/alerts.jsonl
-                                                                                         │
-                                          api/main.py (FastAPI)        dashboard/app.py (Streamlit)
+```mermaid
+flowchart LR
+    P[Пакеты] --> S[capture/sniffer.py]
+    S --> EX[features/extractor.py<br/>потоки → признаки]
+    EX --> PR[model/predict.py]
+    SCH[features/schema.py<br/>единый контракт признаков] -.-> EX
+    SCH -.-> PR
+    TR[model/train.py<br/>CICIDS-2017] --> PR
+    PR --> AL[alerts/engine.py]
+    AL --> J[(data/alerts.jsonl)]
+    J --> DASH[dashboard/app.py<br/>Streamlit]
+    PR --> API[api/main.py<br/>FastAPI]
+    AL --> TG[Telegram-алерты]
 ```
 
 Весь пайплайн использует **один** контракт признаков ([features/schema.py](features/schema.py)).
